@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Property Video Tours — HR Enterprises</title>
+<style>
+  :root{
+    --navy-deep:#101b30;
+    --navy:#16233d;
+    --gold:#d4a64a;
+    --gold-soft:#e8c789;
+    --cream:#f7f3ea;
+    --grey:#9aa6bb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--navy-deep);
+    font-family: Georgia, 'Times New Roman', serif;
+    color:var(--cream);
+    padding:70px 6vw 90px;
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:12px;
+    color:var(--gold-soft);
+    font-family: Arial, sans-serif;
+    font-size:13px;letter-spacing:2px;font-weight:700;
+    margin-bottom:18px;
+  }
+  .eyebrow span.line{width:30px;height:1px;background:var(--gold-soft);display:inline-block;}
+  h1{
+    font-size:46px;
+    margin:0 0 14px;
+    font-weight:400;
+    line-height:1.15;
+  }
+  h1 em{color:var(--gold-soft);font-style:italic;}
+  p.lead{
+    font-family:Arial, sans-serif;
+    color:var(--grey);
+    max-width:560px;
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:44px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:26px;
+  }
+  @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;} h1{font-size:32px;}}
+
+  .card{
+    position:relative;
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--navy);
+    aspect-ratio:4/5;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,.5);}
+
+  .card video, .card img{
+    width:100%;height:100%;object-fit:cover;
+    display:block;
+    filter:saturate(0.95);
+  }
+
+  .overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(16,27,48,0.05) 35%, rgba(16,27,48,0.92) 100%);
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:20px;
+    font-family:Arial, sans-serif;
+  }
+
+  .price-tag{
+    position:absolute;top:16px;left:16px;
+    background:rgba(16,27,48,0.7);
+    border:1px solid rgba(212,166,74,0.5);
+    color:var(--gold-soft);
+    font-size:12px;font-weight:700;
+    padding:6px 12px;border-radius:20px;
+    letter-spacing:0.5px;
+  }
+
+  .play-btn{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(1);
+    width:60px;height:60px;border-radius:50%;
+    background:rgba(212,166,74,0.92);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .3s ease, background .3s ease;
+    pointer-events:none;
+  }
+  .card:hover .play-btn{transform:translate(-50%,-50%) scale(1.12);background:var(--gold);}
+  .play-btn svg{width:20px;height:20px;margin-left:3px;}
+
+  .meta-title{
+    color:#fff;font-size:18px;font-weight:700;
+    font-family:Georgia, serif;
+    margin-bottom:4px;
+  }
+  .meta-sub{
+    color:var(--grey);font-size:13px;
+    display:flex;gap:10px;align-items:center;
+  }
+  .meta-sub span{display:flex;align-items:center;gap:5px;}
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed;inset:0;
+    background:rgba(8,12,22,0.92);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:999;
+    padding:30px;
+  }
+  .lightbox.active{display:flex;}
+  .lightbox-inner{
+    width:min(900px,92vw);
+    background:var(--navy);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,0.6);
+  }
+  .lightbox-inner video{width:100%;display:block;max-height:70vh;background:#000;}
+  .lightbox-footer{
+    padding:18px 24px;
+    font-family:Arial, sans-serif;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .lightbox-footer h3{margin:0 0 4px;font-family:Georgia,serif;color:#fff;font-weight:700;}
+  .lightbox-footer p{margin:0;color:var(--grey);font-size:13px;}
+  .close-btn{
+    background:transparent;border:1px solid var(--gold-soft);
+    color:var(--gold-soft);
+    width:36px;height:36px;border-radius:50%;
+    cursor:pointer;font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s ease;
+  }
+  .close-btn:hover{background:rgba(212,166,74,0.15);}
+</style>
+</head>
+<body>
+
+  <div class="eyebrow"><span class="line"></span> WALK THROUGH BEFORE YOU VISIT</div>
+  <h1>See it move, <em>before you see it live.</em></h1>
+  <p class="lead">A quick walkthrough tells you more than twenty photos. Tap any tour below to step through the property — room by room, light by light — exactly as it stands today.</p>
+
+  <div class="grid" id="videoGrid">
+    <!-- Card 1 -->
+    <div class="card" data-video="Property Mp.Mp4" data-title="Skyline Penthouse, Bandra West" data-sub="3 BHK · 2,400 sq.ft · Sea Facing">
+      <video muted loop playsinline preload="metadata">
+        <source src="Property Mp.mp4">
+      </video>
+      <div class="price-tag">₹4.2 Cr</div>
+      <div class="play-btn"><svg viewBox="0 0 24 24" fill="#101b30"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="overlay">
+        <div class="meta-title">Skyline Penthouse</div>
+        <div class="meta-sub"><span>🛏 3 BHK</span><span>📐 2,400 sq.ft</span></div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card" data-video="Property Mp1.mp4" data-title="Garden Villa, Whitefield" data-sub="4 BHK · 3,100 sq.ft · Private Pool">
+      <video muted loop playsinline preload="metadata">
+        <source src="Property Mp1.mp4">
+      </video>
+      <div class="price-tag">₹6.8 Cr</div>
+      <div class="play-btn"><svg viewBox="0 0 24 24" fill="#101b30"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="overlay">
+        <div class="meta-title">Garden Villa</div>
+        <div class="meta-sub"><span>🛏 4 BHK</span><span>📐 3,100 sq.ft</span></div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card" data-video="Property Mp.Mp4" data-title="Riverside Flat, Powai" data-sub="2 BHK · 1,250 sq.ft · Lake View">
+      <video muted loop playsinline preload="metadata">
+        <source src="Property Mp.mp4">
+      </video>
+      <div class="price-tag">₹1.9 Cr</div>
+      <div class="play-btn"><svg viewBox="0 0 24 24" fill="#101b30"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="overlay">
+        <div class="meta-title">Riverside Flat</div>
+        <div class="meta-sub"><span>🛏 2 BHK</span><span>📐 1,250 sq.ft</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <video id="lightboxVideo" controls autoplay></video>
+      <div class="lightbox-footer">
+        <div>
+          <h3 id="lbTitle">Property Title</h3>
+          <p id="lbSub">Details</p>
+        </div>
+        <button class="close-btn" id="closeBtn">✕</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Hover-to-preview on cards
+  document.querySelectorAll('.card').forEach(card=>{
+    const vid = card.querySelector('video');
+    card.addEventListener('mouseenter', ()=> vid.play());
+    card.addEventListener('mouseleave', ()=>{ vid.pause(); vid.currentTime=0.5; });
+
+    card.addEventListener('click', ()=>{
+      const lightbox = document.getElementById('lightbox');
+      const lbVideo = document.getElementById('lightboxVideo');
+      lbVideo.src = card.dataset.video;
+      document.getElementById('lbTitle').textContent = card.dataset.title;
+      document.getElementById('lbSub').textContent = card.dataset.sub;
+      lightbox.classList.add('active');
+    });
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox').addEventListener('click', (e)=>{
+    if(e.target.id === 'lightbox') closeLightbox();
+  });
+  function closeLightbox(){
+    const lightbox = document.getElementById('lightbox');
+    const lbVideo = document.getElementById('lightboxVideo');
+    lbVideo.pause();
+    lbVideo.src = '';
+    lightbox.classList.remove('active');
+  }
+</script>
+
+</body>
+</html>
